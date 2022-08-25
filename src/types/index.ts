@@ -14,7 +14,7 @@ export interface StateTypes {
   questionList: any[];
   questionListLength: number;
   isFinishedQuestions: boolean;
-  controlQuestionNavigatorCurrent: number;
+  questionNavigatorCurrent: number;
   thingsOfNavbar: {
     isOpen: Boolean;
   };

@@ -9,9 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/marked": "^4.0.6",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "eslint-config-prettier": "8.3.0",
+    "install": "^0.13.0",
+    "marked": "^4.0.19",
+    "node-html-parser": "^5.4.2-0",
+    "npm": "^8.18.0",
     "prettier": "2.3.2",
     "sass": "^1.54.5",
     "vue": "^3.2.37",

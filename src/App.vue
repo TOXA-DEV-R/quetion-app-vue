@@ -14,6 +14,11 @@ export default defineComponent({
 <template>
   <Navbar />
   <div class="container mt-3">
-    <router-view />
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <router-view />
+      </div>
+    </div>
   </div>
 </template>
+

@@ -4,7 +4,6 @@ import { defineComponent, ref } from 'vue';
 import { mapActions, mapState } from 'vuex';
 import NavigatorContainer from '../components/navigator/NavigatorContainer.vue'
 import QuestionCardContainer from '../components/questions-card/QuestionCardContainer.vue';
-import { QuestionListTypes } from '../types';
 
 export default defineComponent({
   name: 'Question-Page',

@@ -4,6 +4,7 @@ import { ActionPayload, createStore, Store } from "vuex";
 import { InjectionKey } from "vue";
 import { QuestionListTypes, StateTypes, GetQuestionTypes } from "../types";
 import { getQuestionListApi } from "../api/index";
+import { randomArray } from "../custom/hooks";
 
 const key: InjectionKey<Store<StateTypes>> = Symbol();
 
@@ -17,7 +18,7 @@ const store = createStore<StateTypes>({
     questionList: [],
     questionListLength: 0,
     isFinishedQuestions: false,
-    controlQuestionNavigatorCurrent: 0,
+    questionNavigatorCurrent: 0,
     thingsOfNavbar: {
       isOpen: false,
     },
@@ -34,7 +35,7 @@ const store = createStore<StateTypes>({
             correct_answer,
             question,
             id: Number(key),
-            incorrect_answers: (incorrect_answers as string[]).map(
+            incorrect_answers: (randomArray(incorrect_answers) as string[]).map(
               (item, indx) => ({
                 value: item,
                 id: indx,
@@ -45,7 +46,6 @@ const store = createStore<StateTypes>({
         return data;
       }
       state.questionList = frmatData(payload);
-      console.log(state.questionList);
       state.questionListLength = payload?.length;
     },
     openThingsOfNavbar(state) {
@@ -53,6 +53,9 @@ const store = createStore<StateTypes>({
     },
     closeThingsOfNavbar(state) {
       state.thingsOfNavbar.isOpen = false;
+    },
+    changeQuestionNavigatorCurrent(state, payload) {
+      state.questionNavigatorCurrent = payload;
     },
   },
   actions: {
