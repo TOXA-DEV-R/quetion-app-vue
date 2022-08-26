@@ -29,3 +29,9 @@ export function calcPercent(arry: any[], whatData: string): number {
   }
   return total;
 }
+
+export function decodeHtml(value: string) {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = value;
+  return txt.value;
+}

@@ -33,10 +33,12 @@ export interface QuestionListTypes {
   correct_answer: string;
   question: string;
   id: number;
+  isQuestionItemClicked: boolean;
   incorrect_answers: IncorrectAnswer[];
 }
 
 export interface IncorrectAnswer {
   value: string;
   id: number;
+  isClick: boolean;
 }
