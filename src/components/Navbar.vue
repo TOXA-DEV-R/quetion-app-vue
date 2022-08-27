@@ -14,7 +14,7 @@ export default defineComponent({
 
   },
   computed: {
-    ...mapState(['thingsOfNavbar', 'questionListLength'])
+    ...mapState(['thingsOfNavbar', 'questionListLength', 'questionNavigatorCurrent'])
   }
 })
 </script>
@@ -25,7 +25,7 @@ export default defineComponent({
         FinalExam
       </RouterLink>
       <h2 v-if="thingsOfNavbar?.isOpen" class="navbar__question-total">
-        1/{{ questionListLength }}
+        {{ questionNavigatorCurrent + 1 }}/{{ questionListLength }}
       </h2>
       <button v-if="thingsOfNavbar?.isOpen" class="btn btn-danger" @click="finishedHandle">
         FINSHED

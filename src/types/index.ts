@@ -11,7 +11,7 @@ export interface CategoryListTypes {
 }
 
 export interface StateTypes {
-  questionList: any[];
+  questionList: QuestionListTypes[];
   questionListLength: number;
   isFinishedQuestions: boolean;
   questionNavigatorCurrent: number;
@@ -33,12 +33,17 @@ export interface QuestionListTypes {
   correct_answer: string;
   question: string;
   id: number;
-  isQuestionItemClicked: boolean;
+  isQuestionClicked: boolean;
   incorrect_answers: IncorrectAnswer[];
+  isCheckedQuestion: boolean;
+  isAnswerFined: boolean;
 }
 
 export interface IncorrectAnswer {
   value: string;
   id: number;
-  isClick: boolean;
+  isClicked: boolean;
+  isTrue: false;
+  whichOneTrueItemClick: boolean;
+  lastClicked: boolean;
 }

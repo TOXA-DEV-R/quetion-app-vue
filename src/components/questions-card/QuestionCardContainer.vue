@@ -17,15 +17,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const prevButton = ref<HTMLElement | null>(null);
-    const nextButton = ref<HTMLElement | null>(null);
-
-
-
     return {
       decodeHtml,
-      prevButton,
-      nextButton,
     }
   },
   methods: {
@@ -51,7 +44,24 @@ export default defineComponent({
         this.changeQuestionNavigatorCurrent(dataLength - 1);
       }
     },
-    ...mapMutations(['questionListItemHandle', 'changeQuestionNavigatorCurrent'])
+    whichOneTrue(): void {
+      const isClick = this.data[this.questionNavigatorCurrent]?.incorrect_answers.some((item) => item.isClicked);
+      const whichOneTrueItemClick = this.data[this.questionNavigatorCurrent]?.incorrect_answers.some((item) => item.whichOneTrueItemClick);
+
+      if (isClick && !whichOneTrueItemClick) {
+        this.whichOneTrueItem(this.questionNavigatorCurrent);
+      }
+    },
+    whichOneTrueControlClasses(): string {
+      const isClick = this.data[this.questionNavigatorCurrent]?.incorrect_answers.some((item) => item.isClicked);
+      const whichOneTrueItemClick = this.data[this.questionNavigatorCurrent]?.incorrect_answers.some((item) => item.whichOneTrueItemClick);
+
+      if (isClick && !whichOneTrueItemClick) {
+        return 'btn-primary';
+      }
+      return 'btn-secondary';
+    },
+    ...mapMutations(['questionListItemHandle', 'changeQuestionNavigatorCurrent', 'whichOneTrueItem'])
   },
   computed: {
     ...mapState(['questionNavigatorCurrent'])
@@ -67,18 +77,23 @@ export default defineComponent({
         {{ decodeHtml(data[questionNavigatorCurrent]?.question) }}
       </h5>
     </div>
+
     <div class="card-body list-group p-0">
       <QuestionCardItem v-for="item in data[questionNavigatorCurrent]?.incorrect_answers" :item="item"
         @listItemHandleOfItem="listItemHandle" />
     </div>
+
     <div class="card-footer d-flex flex-wrap justify-content-between">
       <button class="btn btn-primary text-uppercase shadow-none"
         :class="[questionNavigatorCurrent === 0 ? 'btn__disable' : '']"
-        @click="() => prevQuestion(questionNavigatorCurrent - 1)" ref="prevButton">Previous</button>
-      <button class="btn btn-primary text-uppercase shadow-none">Submit</button>
+        @click="() => prevQuestion(questionNavigatorCurrent - 1)">Previous</button>
+
+      <button class="btn text-uppercase shadow-none" :class="whichOneTrueControlClasses()"
+        @click="() => whichOneTrue()">Submit</button>
+
       <button class="btn btn-primary text-uppercase shadow-none"
         :class="[data.length - 1 === questionNavigatorCurrent ? 'btn__disable' : '']"
-        @click="() => nextQuestion(questionNavigatorCurrent + 1)" ref="nextButton">next</button>
+        @click="() => nextQuestion(questionNavigatorCurrent + 1)">next</button>
     </div>
   </div>
 </template>

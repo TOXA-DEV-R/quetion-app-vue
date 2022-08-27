@@ -13,17 +13,18 @@ export default defineComponent({
   },
   methods: {
     controlButtonsClasses(): string {
-      const { isQuestionItemClicked } = this.$props?.question;
-      if (isQuestionItemClicked) {
-        return 'bg-light'
-      }
+      const { isQuestionClicked, isCheckedQuestion, isAnswerFined } = this.$props?.question;
+      if (isQuestionClicked && !isAnswerFined) return 'bg-light';
+      else if (isCheckedQuestion) return 'bg-danger';
+      else if (isQuestionClicked && isAnswerFined) return 'bg-success';
+
       return '';
     },
     ...mapMutations(["changeQuestionNavigatorCurrent"]),
   },
   computed: {
     ...mapState({
-      navigatorCurrent: "questionNavigatorCurrent"
+      navigatorCurrent: "questionNavigatorCurrent",
     })
   }
 });

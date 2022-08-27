@@ -41,15 +41,19 @@ const store = createStore<StateTypes>({
             let formatData: any[] = data.map((item, indx) => ({
               value: item,
               id: indx,
-              isClick: false,
+              isClicked: false,
               isTrue: false,
+              whichOneTrueItemClick: false,
+              lastClicked: false,
             }));
 
             formatData.push({
               value: correct_answer,
               id: formatData.length,
-              isClick: false,
+              isClicked: false,
               isTrue: true,
+              whichOneTrueItemClick: false,
+              lastClicked: false,
             });
 
             return randomArray(formatData);
@@ -59,8 +63,10 @@ const store = createStore<StateTypes>({
             correct_answer,
             question,
             id: Number(payloadKey),
-            isQuestionItemClicked: false,
+            isQuestionClicked: false,
             incorrect_answers: formatIncorrectaAnswers(incorrect_answers),
+            isCheckedQuestion: false,
+            isAnswerFined: false,
           });
         }
         return data;
@@ -84,13 +90,13 @@ const store = createStore<StateTypes>({
           if (questionNavigatorCurrent === question.id) {
             return {
               ...question,
-              isQuestionItemClicked: true,
+              isQuestionClicked: true,
               incorrect_answers: question?.incorrect_answers.map(
                 (item: IncorrectAnswer) => {
                   if (item.id === id) {
-                    return { ...item, isClick: true };
+                    return { ...item, isClicked: true };
                   } else {
-                    return { ...item, isClick: false };
+                    return { ...item, isClicked: false };
                   }
                 }
               ),
@@ -100,6 +106,55 @@ const store = createStore<StateTypes>({
           }
         }
       );
+    },
+    whichOneTrueItem(state, payload) {
+      state.questionList = state.questionList.map((question) => {
+        if (payload === question.id) {
+          return {
+            ...question,
+            isQuestionClicked: true,
+            incorrect_answers: question.incorrect_answers.map((item) => {
+              if (item.isTrue) {
+                return {
+                  ...item,
+                  whichOneTrueItemClick: true,
+                };
+              } else if (item.isClicked) {
+                return {
+                  ...item,
+                  lastClicked: true,
+                };
+              } else {
+                return item;
+              }
+            }),
+          };
+        } else {
+          return question;
+        }
+      });
+
+      state.questionList = state.questionList.map((question) => {
+        const isTureAnswer = question?.incorrect_answers.some(
+          (item) => item.isTrue === item.whichOneTrueItemClick
+        );
+
+        const warning = question?.incorrect_answers.some(
+          (item) =>
+            item.isClicked && item.lastClicked && !item.whichOneTrueItemClick
+        );
+
+        if (payload === question.id) {
+          return {
+            ...question,
+            isAnswerFined: isTureAnswer,
+            isCheckedQuestion: warning,
+          };
+        } else {
+          return question;
+        }
+      });
+      console.log(state.questionList);
     },
   },
   actions: {

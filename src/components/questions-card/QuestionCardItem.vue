@@ -3,7 +3,7 @@ import { isTemplateNode } from '@vue/compiler-core';
 import { defineComponent, PropType } from 'vue';
 import { mapState } from 'vuex';
 import { decodeHtml } from '../../custom/hooks';
-import { IncorrectAnswer } from '../../types';
+import { IncorrectAnswer, QuestionListTypes } from '../../types';
 
 export default defineComponent({
   name: 'question-card-item',
@@ -14,25 +14,29 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(_, { emit }) {
-    function onListItemHandle(id: number, questionNavigatorCurrent: number): void {
-      emit('listItemHandleOfItem', { id, questionNavigatorCurrent });
-    }
-
-    return { decodeHtml, onListItemHandle }
+  setup() {
+    return { decodeHtml }
   },
   methods: {
-    listItemControlClasses(): string {
-      const { isClick } = this.$props?.item;
+    onListItemHandle(id: number, questionNavigatorCurrent: number): void {
+      const question = (this.questionList as QuestionListTypes[])[questionNavigatorCurrent];
+      const clicked = question.isQuestionClicked;
 
-      if (isClick) {
-        return 'bg-light'
+      if (!clicked) {
+        this.$emit('listItemHandleOfItem', { id, questionNavigatorCurrent });
       }
-      return ''
+    },
+    listItemControlClasses(): string {
+      const { isClicked, whichOneTrueItemClick, isTrue, lastClicked } = this.$props?.item;
+
+      if (isClicked && lastClicked && !whichOneTrueItemClick) return 'bg-warning';
+      else if (isClicked && !whichOneTrueItemClick) return 'bg-light';
+      else if (whichOneTrueItemClick && isTrue) return 'bg-success';
+      else return '';
     }
   },
   computed: {
-    ...mapState(['questionNavigatorCurrent'])
+    ...mapState(['questionNavigatorCurrent', 'questionList'])
   }
 });
 </script>
