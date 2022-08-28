@@ -14,9 +14,15 @@ export default defineComponent({
   methods: {
     controlButtonsClasses(): string {
       const { isQuestionClicked, isCheckedQuestion, isAnswerFined } = this.$props?.question;
-      if (isQuestionClicked && !isAnswerFined) return 'bg-light';
-      else if (isCheckedQuestion) return 'bg-danger';
-      else if (isQuestionClicked && isAnswerFined) return 'bg-success';
+
+      if (!this.isFinshed) {
+        if (isQuestionClicked && !isAnswerFined) return 'bg-light';
+        else if (isCheckedQuestion) return 'bg-danger';
+        else if (isQuestionClicked && isAnswerFined) return 'bg-success';
+      } else if (this.isFinshed) {
+        if (isCheckedQuestion) return 'bg-danger';
+        else if (isQuestionClicked && isAnswerFined) return 'bg-success';
+      }
 
       return '';
     },
@@ -25,6 +31,7 @@ export default defineComponent({
   computed: {
     ...mapState({
       navigatorCurrent: "questionNavigatorCurrent",
+      isFinshed: 'isFinshed',
     })
   }
 });
@@ -33,7 +40,7 @@ export default defineComponent({
   <button type="button" class="navig__btn border border-1 text-black pt-1 pb-1"
     :class="[controlButtonsClasses(), navigatorCurrent === question.id ? 'btn__current' : '']"
     style="border: 1px solid rgba(0, 0, 0, 1)" @click="() => changeQuestionNavigatorCurrent(question.id)">{{ question.id
-        + 1
+      + 1
     }}</button>
 </template>
 
