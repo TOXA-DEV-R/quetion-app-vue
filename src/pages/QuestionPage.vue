@@ -27,6 +27,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <NavigatorContainer :data="questionList" />
-  <QuestionCardContainer :data="questionList" />
+  <div v-if="(questionList?.length > 0)">
+    <NavigatorContainer :data="questionList" />
+    <QuestionCardContainer :data="questionList" />
+  </div>
+
+  <div v-if="!(questionList?.length > 0)" class="loading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 </template>

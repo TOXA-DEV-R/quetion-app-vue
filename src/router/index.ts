@@ -6,10 +6,12 @@ import QuestionPage from "../pages/QuestionPage.vue";
 
 const routes = [
   {
+    name: "home",
     path: "/",
     component: Home,
   },
   {
+    name: "questions",
     path: "/questions",
     component: QuestionPage,
   },

@@ -18,16 +18,20 @@ const ActionKeys = {
 };
 const { GETQUESTIONLIST } = ActionKeys;
 
-const store = createStore<StateTypes>({
-  state: {
-    questionList: [],
-    questionListLength: 0,
-    isFinishedQuestions: false,
-    questionNavigatorCurrent: 0,
-    thingsOfNavbar: {
-      isOpen: false,
-    },
+const initialState: StateTypes = {
+  questionList: [],
+  questionListLength: 0,
+  isFinishedQuestions: false,
+  questionNavigatorCurrent: 0,
+  howmanyIsFined: 0,
+  isFinshed: false,
+  thingsOfNavbar: {
+    isOpen: false,
   },
+};
+
+const store = createStore<StateTypes>({
+  state: initialState,
   mutations: {
     [GETQUESTIONLIST](state, payload) {
       function frmatData(payload: any[]): QuestionListTypes[] {
@@ -155,6 +159,34 @@ const store = createStore<StateTypes>({
         }
       });
       console.log(state.questionList);
+    },
+    finallResult(state) {
+      let total: number = 0;
+
+      state.questionList.forEach((question) => {
+        if (question.isAnswerFined) {
+          total++;
+        }
+      });
+      state.howmanyIsFined = total;
+    },
+    finishedTesting(state) {
+      state.isFinshed = true;
+    },
+    reloadApp(state) {
+      const newState: StateTypes = {
+        questionList: [],
+        questionListLength: 0,
+        isFinishedQuestions: false,
+        questionNavigatorCurrent: 0,
+        howmanyIsFined: 0,
+        isFinshed: false,
+        thingsOfNavbar: {
+          isOpen: false,
+        },
+      };
+
+      state = newState;
     },
   },
   actions: {

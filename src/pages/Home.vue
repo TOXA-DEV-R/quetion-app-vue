@@ -4,7 +4,8 @@ import Selection from '../components/Selection.vue';
 import { CategoryListTypes } from '../types/index';
 import { getCategoriesApi } from '../api/index';
 import router from '../router';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
+import { amountData } from '../plugins/data';
 
 export default defineComponent({
   name: "home",
@@ -22,7 +23,8 @@ export default defineComponent({
     return {
       categoryList,
       category,
-      amount
+      amount,
+      amountData,
     }
   },
   methods: {
@@ -30,6 +32,7 @@ export default defineComponent({
       const response = await getCategoriesApi();
       const data: CategoryListTypes[] = response?.trivia_categories;
       this.categoryList = data;
+
     },
     startButtunHandle() {
       router.push({
@@ -50,33 +53,24 @@ export default defineComponent({
     },
     ...mapMutations(['openThingsOfNavbar'])
   },
+  computed: {
+    ...mapState(['questionList'])
+  },
 })
 </script>
 
 <template>
-  <Selection title="Number Of Questions:" :data="[
-    {
-      name: '10',
-      id: 10
-    },
-    {
-      name: '15',
-      id: 15
-    },
-    {
-      name: '20',
-      id: 20
-    },
-    {
-      name: '25',
-      id: 25
-    },
-    {
-      name: '30',
-      id: 30
-    },
-  ]" :mtop="false" typeSelect="amount" @firstSelectValues="selectedQuestiontHandel" />
-  <Selection v-if="categoryList.length > 0" title="Select Category:" :data="categoryList" :mtop="true"
-    typeSelect="category" @secondSelectValues="selectedQuestiontHandel" />
-  <button class="btn btn-success w-100 mt-3 text-uppercase shadow-none" @click="startButtunHandle">Start</button>
+  <section v-if="categoryList?.length > 0" class="section-home">
+    <Selection title="Number Of Questions:" :data="amountData" :mtop="false" typeSelect="amount"
+      @firstSelectValues="selectedQuestiontHandel" />
+    <Selection title="Select Category:" :data="categoryList" :mtop="true" typeSelect="category"
+      @secondSelectValues="selectedQuestiontHandel" />
+    <button class="btn btn-success w-100 mt-3 text-uppercase shadow-none" @click="startButtunHandle">Start</button>
+  </section>
+
+  <div v-if="!(categoryList?.length > 0)" class="loading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 </template>
